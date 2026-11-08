@@ -1,0 +1,99 @@
+@import "@fontsource-variable/inter-tight";
+@import "tailwindcss";
+
+/*
+ * Design tokens. Tailwind v4 turns every --color-* variable into utilities,
+ * e.g. --color-accent -> bg-accent, text-accent, border-accent.
+ *
+ * Raw palette (dark metallic):
+ *   void #08090B · graphite #17191E · gunmetal #343941
+ *   silver #A9B0B9 · chrome #E9EDF1 · glow #9DDCFF (use sparingly)
+ * Contrast: chrome on void ≈ 17:1, silver on void ≈ 9:1, silver on graphite ≈ 8:1.
+ */
+@theme {
+  --color-void: #08090b;
+  --color-graphite: #17191e;
+  --color-gunmetal: #343941;
+  --color-steel: #5b626c;
+  --color-silver: #a9b0b9;
+  --color-chrome: #e9edf1;
+  --color-glow: #9ddcff;
+
+  /* Semantic names used across the app. */
+  --color-background: var(--color-void);
+  --color-surface: var(--color-graphite);
+  --color-line: var(--color-gunmetal);
+  --color-foreground: var(--color-chrome);
+  --color-muted: var(--color-silver);
+  --color-accent: var(--color-glow);
+  --color-accent-soft: #9ddcff26;
+
+  --font-sans: "Inter Tight Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --tracking-display: -0.035em;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Keep anchor targets clear of the fixed navbar. */
+    scroll-padding-top: 4.5rem;
+    color-scheme: dark;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-chrome);
+    color: var(--color-void);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+}
+
+/*
+ * Metallic surface: graphite with a faint top-down silver sheen and a
+ * hairline border. Used by Card; kept here so the gradient lives in one place.
+ */
+@utility metal-surface {
+  background-color: color-mix(in oklab, var(--color-graphite) 82%, transparent);
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--color-chrome) 7%, transparent) 0%,
+    color-mix(in oklab, var(--color-chrome) 1.5%, transparent) 38%,
+    transparent 100%
+  );
+  border: 1px solid color-mix(in oklab, var(--color-gunmetal) 85%, transparent);
+}
+
+/* Polished chrome fill for the primary button. */
+@utility metal-fill {
+  background-image: linear-gradient(
+    180deg,
+    var(--color-chrome) 0%,
+    #c9cfd6 55%,
+    var(--color-silver) 100%
+  );
+}
+
+/* Hairline that fades out at both ends. */
+@utility hairline-fade {
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-silver) 45%, transparent) 50%,
+    transparent
+  );
+}
