@@ -4,7 +4,7 @@ export function Lighting() {
     <>
       <ambientLight intensity={0.35} />
       <directionalLight position={[4, 5, 5]} intensity={2.2} />
-      <pointLight position={[-5, -2, -3]} intensity={30} color="#c084fc" />
+      <pointLight position={[-5, -2, -3]} intensity={18} color="#9ddcff" />
     </>
   )
 }

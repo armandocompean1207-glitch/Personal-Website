@@ -13,8 +13,8 @@ const desktop: Record<SectionId, ModelPose> = {
   hero: { position: [2.2, 0, 0], rotation: [0.2, 0, 0], scale: 1 },
   about: { position: [-2.3, 0.1, 0], rotation: [-0.2, TURN * 0.5, 0.1], scale: 0.85 },
   skills: { position: [2.3, -0.1, 0], rotation: [0.3, TURN, 0], scale: 0.9 },
-  projects: { position: [-2.4, 0, -0.5], rotation: [-0.1, TURN * 1.5, -0.1], scale: 0.8 },
-  contact: { position: [2.2, 0, 0], rotation: [0, TURN * 2, 0], scale: 1 },
+  projects: { position: [-2.85, 0, -0.5], rotation: [-0.1, TURN * 1.5, -0.1], scale: 0.68 },
+  contact: { position: [2.1, 0, -0.3], rotation: [0, TURN * 2, 0], scale: 0.85 },
 }
 
 // Portrait phones see far less horizontal space (x ≈ ±1.15 at z = 0), so the

@@ -29,7 +29,7 @@ A fixed, full screen WebGL layer that sits behind the HTML and is lazy loaded fr
 - `gsap.matchMedia` with a conditions object runs only when at least one condition matches. Keep `isDesktop` and `isMobile` complementary, or phones get no pose at all.
 - The timeline gives each section an equal share of the scroll. It only lines up because every section is at least `min-h-svh`.
 - Portrait phones see about x ±1.15 at z 0, so mobile poses must stay small (scale about 0.45) and pushed back.
-- Breakpoint 768px (`DESKTOP_MEDIA_QUERY`) must match Tailwind `md`, because section text alignment switches at the same width.
+- Breakpoint 1024px (`DESKTOP_MEDIA_QUERY`) must match Tailwind `lg`, because the split content layout switches at the same width. Desktop poses are authored for 1440×900; `useScrollAnimation` scales x and scale by aspect ratio (recomputed on resize via `invalidateOnRefresh`), so narrower desktops keep the model out of the text.
 - three.js is about 1 MB of the bundle (290 kB gzipped). That's why `Scene` is lazy loaded and `chunkSizeWarningLimit` is raised in `vite.config.ts`.
 - Verify 3D changes in a real browser at both desktop and phone widths, with reduced motion on and off. A clean `tsc` proves nothing about the scene.
 

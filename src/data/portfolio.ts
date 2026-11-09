@@ -32,6 +32,8 @@ export interface Project {
   tech: string[]
   liveUrl?: string
   sourceUrl?: string
+  /** Rendered first and larger in the Projects section. */
+  featured?: boolean
 }
 
 export type SocialKind = 'email' | 'github' | 'linkedin' | 'website'
@@ -70,6 +72,7 @@ export const projects: Project[] = [
     tech: ['React', 'TypeScript', 'Three.js'],
     liveUrl: 'https://example.com',
     sourceUrl: 'https://github.com/',
+    featured: true,
   },
   {
     title: 'Project Two',
@@ -90,3 +93,35 @@ export const socials: SocialLink[] = [
   { kind: 'github', label: 'GitHub', href: 'https://github.com/' },
   { kind: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/' },
 ]
+
+/** Interface copy: headings, buttons and small labels rendered by the sections. */
+export const copy = {
+  hero: {
+    greeting: 'Hi, I’m',
+    primaryCta: { label: 'View projects', href: '#projects' },
+    secondaryCta: { label: 'Get in touch', href: '#contact' },
+    scrollCue: 'Scroll to explore',
+  },
+  about: { eyebrow: 'About', title: 'Background & experience', locationLabel: 'Based in' },
+  skills: { eyebrow: 'Skills', title: 'Tools I work with' },
+  projects: {
+    eyebrow: 'Projects',
+    title: 'Selected work',
+    featuredLabel: 'Featured',
+    liveLabel: 'Live',
+    sourceLabel: 'Source',
+    techLabel: 'Technologies',
+    liveDemoLabel: 'live demo',
+    sourceCodeLabel: 'source code',
+  },
+  contact: {
+    eyebrow: 'Contact',
+    title: 'Let’s build something',
+    intro:
+      'I’m open to new opportunities and collaborations. The fastest way to reach me is by email.',
+    elsewhereLabel: 'Elsewhere',
+  },
+  footer: { credits: 'Built with React, Three.js and GSAP.' },
+  nav: { label: 'Primary', openMenu: 'Open menu', closeMenu: 'Close menu' },
+  a11y: { skipToContent: 'Skip to content', opensInNewTab: '(opens in new tab)' },
+} as const

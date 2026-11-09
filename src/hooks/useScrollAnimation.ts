@@ -28,7 +28,32 @@ export interface ScrollAnimationOptions {
 }
 
 const toXYZ = ([x, y, z]: Vec3) => ({ x, y, z })
-const uniform = (s: number) => ({ x: s, y: s, z: s })
+
+/**
+ * Desktop poses are authored for a 1440×900 (16:10) viewport. On narrower
+ * desktops (e.g. 1024×768) the visible world width shrinks, so the same x and
+ * scale would push the model into the text column. Scaling x and scale by the
+ * aspect ratio keeps the model at the same share of the screen.
+ */
+const REFERENCE_ASPECT = 1.6
+const MIN_FIT = 0.7
+const desktopFit = () =>
+  Math.min(1, Math.max(MIN_FIT, window.innerWidth / window.innerHeight / REFERENCE_ASPECT))
+const noFit = () => 1
+
+/**
+ * GSAP vars for a pose. x and scale are functions, so with
+ * `invalidateOnRefresh` they are recomputed whenever ScrollTrigger refreshes
+ * (e.g. on window resize).
+ */
+const poseVars = (pose: ModelPose, fit: () => number) => {
+  const scale = () => pose.scale * fit()
+  return {
+    position: { x: () => pose.position[0] * fit(), y: pose.position[1], z: pose.position[2] },
+    rotation: toXYZ(pose.rotation),
+    scale: { x: scale, y: scale, z: scale },
+  }
+}
 
 /**
  * Drives any Three.js object (mesh, group, loaded GLTF scene…) through a list
@@ -65,12 +90,17 @@ export function useScrollAnimation(
           }
           const [first, ...rest] = isDesktop ? poses.desktop : poses.mobile
           if (!first) return
+          const fit = isDesktop ? desktopFit : noFit
+          const start = poseVars(first, fit)
 
-          // gsap.set (rather than direct assignment) so mm.revert() can undo it.
-          gsap.set(object.position, toXYZ(first.position))
-          gsap.set(object.rotation, toXYZ(first.rotation))
-          gsap.set(object.scale, uniform(first.scale))
+          // Apply the first pose right away (the scrubbed timeline below doesn't
+          // render until the first scroll). gsap.set, rather than direct
+          // assignment, so mm.revert() can undo it.
+          gsap.set(object.position, start.position)
+          gsap.set(object.rotation, start.rotation)
+          gsap.set(object.scale, start.scale)
 
+          // Reduced motion: hold the first pose.
           if (reduceMotion || rest.length === 0) return
 
           // One timeline mapped to the whole content height. Each pose gets an
@@ -83,14 +113,23 @@ export function useScrollAnimation(
               start: 'top top',
               end: 'bottom bottom',
               scrub,
+              invalidateOnRefresh: true,
             },
           })
 
+          // The first pose is also part of the timeline, so a refresh (resize)
+          // recomputes it along with the others.
+          timeline
+            .set(object.position, start.position, 0)
+            .set(object.rotation, start.rotation, 0)
+            .set(object.scale, start.scale, 0)
+
           for (const pose of rest) {
+            const vars = poseVars(pose, fit)
             timeline
-              .to(object.position, toXYZ(pose.position))
-              .to(object.rotation, toXYZ(pose.rotation), '<')
-              .to(object.scale, uniform(pose.scale), '<')
+              .to(object.position, vars.position)
+              .to(object.rotation, vars.rotation, '<')
+              .to(object.scale, vars.scale, '<')
           }
         },
       )

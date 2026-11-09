@@ -22,7 +22,7 @@ export function PlaceholderModel() {
   return (
     <mesh ref={meshRef}>
       <torusKnotGeometry args={[1, 0.32, 180, 24]} />
-      <meshStandardMaterial color="#8ba4ff" metalness={0.4} roughness={0.25} />
+      <meshStandardMaterial color="#c9cfd6" metalness={0.55} roughness={0.28} />
     </mesh>
   )
 }

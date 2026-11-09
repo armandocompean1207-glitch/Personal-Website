@@ -31,7 +31,7 @@
   --font-sans: "Inter Tight Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  --tracking-display: -0.035em;
+  --tracking-display: -0.025em;
 }
 
 @layer base {
@@ -55,6 +55,13 @@
   ::selection {
     background-color: var(--color-chrome);
     color: var(--color-void);
+  }
+
+  /* Keep focused elements clear of the fixed navbar when the browser scrolls to them. */
+  a,
+  button,
+  [data-robot-anchor] {
+    scroll-margin-top: 6rem;
   }
 
   :focus-visible {
